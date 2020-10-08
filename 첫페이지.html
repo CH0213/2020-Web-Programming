@@ -20,94 +20,90 @@
   <!-- 상품추가 -->
   <div id="addbox">
     <p id="add_title">상품 장바구니 등록</p>
-    <p>상품 이미지 : <span><input type="file" name="fileToUpload" id="p_image"></span></p>
+    <p>상품 이미지 : <span><input type="file" name="fileToUpload" id="p_image" accept=".jpeg, .jpg, .png"></span></p>
     <p>상품 이름 : <input type="input" id="p_name"></p>
     <p>상품 가격 : <input type="input" id="p_price"></p>
     <p>상품 개수 : <input type="input" id="p_number"> 최대 50개 이하까지 선택 가능</p>
 
-      배송 방법 :
-      <input type="radio" name="p_delivery" value="일반">일반 배송
-      <input type="radio" name="p_delivery" value="새벽">새벽 배송
-      <br>
+    배송 방법 :
+    <input type="radio" name="p_delivery" value="일반">일반 배송
+    <input type="radio" name="p_delivery" value="새벽">새벽 배송
+    <br>
 
-      <input type="button" onclick="add()" value="장바구니 담기" id="join">
-      <input type="button" onclick="cancel()" value="취소" id="join">
+    <input type="button" onclick="add()" value="장바구니 담기" id="join">
+    <input type="button" onclick="add_box()" value="취소" id="join">
   </div>
   <br>
 
 
 
   <!-- 일반 배송 테이블 -->
-  <p>일반 배송<input type="checkbox" id="일반선택"></p>
+  <p>
+    일반 배송
+    <input type="checkbox" id="일반선택">
+    <input type="button" onclick="delete_row()" value="삭제">
+    <input type="button" value="새벽 배송으로 이동" onclick="move('새벽')" id="새벽으로">
+  </p>
   <table id="일반">
     <tr>
       <th>선택</th>
-      <th>상품명</th>
-      <th>미리보기</th>
-      <th>정가</th>
-      <th>수량</th>
-      <th>합계</th>
+      <th>상품 이미지</th>
+      <th>상품 이름</th>
+      <th>상품 개별 가격</th>
+      <th>상품 개수</th>
+      <th>상품 구매 가격</th>
     </tr>
-    <tbody id="일반이동">
-    </tbody>
-    <tr>
+    <!-- <tbody id="일반이동">
+    </tbody> -->
+    <tr id="일반추가">
       <td colspan="5"><strong>총가격<strong></td>
       <td id="일반총합계">0</td>
     </tr>
   </table>
-  <!-- 삭제 및 이동 버튼 -->
-  <p>
-    <input type="button" onclick="delete_row()" value="삭제">
-    <input type="button" onclick="move('새벽')" id="새벽으로" value="이동">
-  </p>
-  <br>
-
-
+  <br><br>
 
   <!-- 새벽 배송 테이블 -->
-  <p>새벽 배송<input type="checkbox" id="새벽선택"></p>
-
+  <p>
+    새벽 배송
+    <input type="checkbox" id="새벽선택">
+    <input type="button" onclick="delete_row()" value="삭제">
+    <input type="button" onclick="move('일반')" value="일반 배송으로 이동" id="일반으로">
+  </p>
   <table id="새벽">
     <tr>
       <th>선택</th>
-      <th>상품명</th>
-      <th>미리보기</th>
-      <th>정가</th>
-      <th>수량</th>
-      <th>합계</th>
+      <th>상품 이미지</th>
+      <th>상품 이름</th>
+      <th>상품 개별 가격</th>
+      <th>상품 개수</th>
+      <th>상품 구매 가격</th>
     </tr>
-    <tbody id="새벽이동">
-    </tbody>
-    <tr>
+    <tr id="새벽추가">
       <td colspan="5"><strong>총가격<strong></td>
       <td id="새벽총합계">0</td>
     </tr>
   </table>
-  <!-- 삭제 및 이동 버튼 -->
-  <p>
-    <input type="button" onclick="delete_row()" value="삭제">
-    <input type="button" onclick="move('일반')" id="일반으로" value="이동">
-  </p>
-  <br>
+  <br><br>
+
 
 
 
   <!-- 검색 기능 -->
   <p>
-    <input type="input" id="search_name">
+    상품 이름 : <input type="input" id="search_name">
   </p>
   <p>
-    <input type="input" id="min">
-    <input type="input" id="max">
+    가격 범위 : <input type="input" id="min">
+    ~ <input type="input" id="max">
   </p>
   <p>
-    <input type="button" onclick="search()">
-    <input type="button" onclick="get_back()">
+    <input type="button" value="검색" onclick="search()">
+    <input type="button" value="원래 색으로 바꾸기" onclick="get_back()">
   </p>
 
 
 
-  <script src="hw1.js?ver=2"></script>
+  <script src="hw1.js?ver=1"></script>
 </body>
 
 </html>

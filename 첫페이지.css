@@ -13,10 +13,11 @@ table, th, td {
   font-family: arial, sans-serif;
 }
 
-/* th {
-  color: white;
-  background-color: green;
-} */
+#preview {
+  height: 80px;
+  width: 80px;
+}
+
 #addbox {
   width: 400px;
   height: 250px;

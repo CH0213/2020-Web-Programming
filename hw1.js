@@ -1,15 +1,3 @@
-// 장바구니에 담기
-function add_box() {
-
-  var display = document.getElementById("addbox");
-
-  if (display.style.display == 'none') {
-    display.style.display = 'block';
-  } else {
-    display.style.display = 'none';
-  }
-
-}
 // 필요한 전역변수 //////////////////////////////////////////////////////////////
 var isOK = true;
 var p_image = document.getElementById("p_image");
@@ -33,27 +21,74 @@ function get_sel_type() {
   return sel_type;
 }
 
+// 장바구니에 담기
+function add_box() {
+
+  var display = document.getElementById("addbox");
+
+  if (display.style.display == 'none') {
+    display.style.display = 'block';
+  } else {
+    display.style.display = 'none';
+  }
+  add_box_remove();
+}
+
+function add_box_remove() {
+  document.getElementById("p_image").value = "";
+  document.getElementById("p_name").value = "";
+  document.getElementById("p_price").value = "";
+  document.getElementById("p_number").value = "";
+  var radio = document.getElementsByName("p_delivery");
+  for (var i = 0; i < radio.length; i++) {
+    if (radio[i].checked) {
+      radio[i].checked = false;
+    }
+  }
+}
+
 
 
 // 장바구니에 추가 //////////////////////////////////////////////////////////////
 function add() {
+
   isOK = true;
   p_image = document.getElementById("p_image");
   p_name = document.getElementById("p_name");
   p_price = document.getElementById("p_price");
   p_number = document.getElementById("p_number");
-  case1();
-  case2();
+  case1and2();
   case3to6();
   addRow(get_sel_type());
+  isallcheck();
+  if(document.getElementsByClassName("가격").length==1){
+    font_style();
+  }
+}
+
+var fontSize;
+var fontWeight;
+function font_style(){
+  var size = document.getElementsByClassName("가격")[0];
+  var temp = window.getComputedStyle(size, null).getPropertyValue('font-size');
+  fontSize = parseFloat(temp);
+  temp = window.getComputedStyle(size, null).getPropertyValue('font-weight');
+  fontWeight = parseFloat(temp);
 }
 
 
-// 경우1 ///////////////////////////////////////////////////////////////////////
-function case1() {
+// 경우1,2 ///////////////////////////////////////////////////////////////////////
+function case1and2() {
   if (p_image.value == "") {
     isOK = false;
     alert("상품 이미지를 추가하시오.");
+  }else {
+    p_image = p_image.value;
+    p_image = p_image.slice(p_image.indexOf(".") + 1).toLowerCase();
+    if (p_image != "jpg" && p_image != "png" && p_image != "jpeg") {
+      alert("이미지 파일이 아닙니다 . ‘jpg’, ‘jpeg’ 또는 png 을 확장자로 가진 파일을 추가하시오.");
+      isOK = false;
+    }
   }
   if (p_name.value == "") {
     isOK = false;
@@ -70,16 +105,6 @@ function case1() {
   if (get_sel_type() == null) {
     isOK = false;
     alert("배송 방법을 선택하시오.");
-  }
-}
-
-
-// 경우2 ///////////////////////////////////////////////////////////////////////
-function case2() {
-  var p_image = document.getElementById("p_image").value;
-  p_image = p_image.slice(p_image.indexOf(".") + 1).toLowerCase();
-  if (p_image != "jpg" && p_image != "png" && p_image != "jpeg") {
-    alert("이미지 파일이 아닙니다 . ‘jpg’, ‘jpeg’ 또는 png 을 확장자로 가진 파일을 추가하시오.");
   }
 }
 
@@ -124,18 +149,16 @@ function addRow(sel_type) {
     var cell3 = row.insertCell(3);
     var cell4 = row.insertCell(4);
     var cell5 = row.insertCell(5);
-    cell0.innerHTML = "<input type=checkbox class='check" + sel_type + "'>";
-    cell1.innerHTML = p_image;
+    cell0.innerHTML = "<input type=checkbox class='check" + sel_type + "' checked>";
+    cell1.innerHTML = "<image id ='preview' src ='./image/" + document.getElementById('p_image').files[0].name + "'/>";
     cell2.innerHTML = p_name.value;
     cell3.innerHTML = Number(p_price.value);
     cell4.innerHTML = Number(p_number.value);
     cell5.innerHTML = Number(p_price.value * p_number.value);
-    // cell2.setAttribute('class', sel_type + '이름');
-    // cell3.setAttribute('class', sel_type + '가격');
-    // cell5.setAttribute('class', sel_type + '합계');
     cell2.setAttribute('class', '이름');
     cell3.setAttribute('class', '가격');
     cell5.setAttribute('class', sel_type + '합계');
+    add_box_remove();
   }
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -209,17 +232,7 @@ function delete_row() {
       i--;
     }
   }
-  if (all_checked("일반")) {
-    ac일반.checked = true;
-  } else {
-    ac일반.checked = false;
-  }
-
-  if (all_checked("새벽")) {
-    ac새벽.checked = true;
-  } else {
-    ac새벽.checked = false;
-  }
+  isallcheck();
   calculate_sum();
 }
 
@@ -229,10 +242,10 @@ function calculate_sum() {
   var sum2 = document.getElementsByClassName('새벽합계');
   var as1 = 0;
   var as2 = 0;
-  if(check일반.length == 0){
+  if (check일반.length == 0) {
     as1 = 0;
   }
-  if(check새벽.length == 0){
+  if (check새벽.length == 0) {
     as2 = 0;
   }
   for (var i = 0; i < check일반.length; i++) {
@@ -280,38 +293,45 @@ function all_checked(sel_type) {
 }
 
 
+
 function move(delivery) { // deliver는 어디로 이동할지!
-  var set_delivary; // class를 바꿔줘야 하므로
+  var checkk;
   if (delivery == "새벽") {
-    check = document.getElementsByClassName('check일반');
-  } else {
-    check = document.getElementsByClassName('check새벽');
+    checkk = document.getElementsByClassName('check일반');
+  }
+  if (delivery == "일반") {
+    checkk = document.getElementsByClassName('check새벽');
   }
 
-  for (var i = 0; i < check.length; i++) {
-    if (check[i].checked == true) {
-      console.log(i);
-      console.log(check);
-      var tableRow = document.getElementById(delivery + "이동").insertRow();
-      for (var j = 0; j < 6; j++) {
-        tableRow.insertCell();
-        tableRow.cells[j].innerHTML = check[i].parentElement.parentElement.childNodes[j].innerHTML;
-      }
-      console.log(tableRow.cells[0]);
-      console.log(tableRow.cells[1]);
-      console.log(tableRow.cells[2]);
-      console.log(check[i].parentElement.parentElement.childNodes[0].innerHTML);
-      console.log(check[i].parentElement.parentElement.childNodes[1].innerHTML);
-      console.log(check[i].parentElement.parentElement.childNodes[2].innerHTML);
-      tableRow.setAttribute('class', 'row'+delivery);
-      tableRow.cells[0].childNodes[0].setAttribute('class', 'check' + delivery);
-      tableRow.cells[5].setAttribute('class', delivery+'합계');
-      check[i].parentElement.parentElement.remove();
+  for (var i = 0; i < checkk.length; i++) {
+    if (checkk[i].checked == true) {
+      var table = document.getElementById(delivery);
+      var row = table.insertRow(table.rows.length - 1);
+      row.setAttribute('class', 'row' + delivery);
+      var cell0 = row.insertCell(0);
+      var cell1 = row.insertCell(1);
+      var cell2 = row.insertCell(2);
+      var cell3 = row.insertCell(3);
+      var cell4 = row.insertCell(4);
+      var cell5 = row.insertCell(5);
+      cell0.innerHTML = "<input type=checkbox class='check" + delivery + "'>";
+      cell1.innerHTML = checkk[i].parentElement.parentElement.childNodes[1].innerHTML;
+      cell2.innerHTML = checkk[i].parentElement.parentElement.childNodes[2].innerHTML
+      cell3.innerHTML = checkk[i].parentElement.parentElement.childNodes[3].innerHTML
+      cell4.innerHTML = checkk[i].parentElement.parentElement.childNodes[4].innerHTML
+      cell5.innerHTML = checkk[i].parentElement.parentElement.childNodes[5].innerHTML
+      cell2.setAttribute('class', '이름');
+      cell3.setAttribute('class', '가격');
+      cell5.setAttribute('class', delivery + '합계');
+      checkk[i].parentElement.parentElement.remove();
       i--;
     }
   }
+  isallcheck();
   calculate_sum();
 }
+
+
 
 
 
@@ -320,54 +340,48 @@ function search() {
   var min = document.getElementById('min').value;
   var max = document.getElementById('max').value;
 
-  if(min == ""){
-    min=0;
+  if (min == "") {
+    min = 0;
   }
-  if(max == ""){
-    max=999999999;
+  if (max == "") {
+    max = 999999999;
   }
-  if(search_name==""){
-    search_name="";
+  if (search_name == "") {
+    search_name = "";
   }
   var color_name = document.getElementsByClassName('이름');
   var color_price = document.getElementsByClassName('가격');
-  for (var i = 0; i < color_name.length; i++){
-    if(color_name[i].innerHTML.indexOf(search_name) !== -1 && min <= color_price[i].innerHTML && color_price[i].innerHTML <= max){
+  for (var i = 0; i < color_name.length; i++) {
+    if (color_name[i].innerHTML.indexOf(search_name) !== -1 && min <= color_price[i].innerHTML && color_price[i].innerHTML <= max) {
       color_name[i].parentElement.style.color = 'red';
+      color_name[i].parentElement.style.fontSize = '20px';
+      color_name[i].parentElement.style.fontWeight = '600px';
     }
   }
 }
 
 function get_back() {
   var color_name = document.getElementsByClassName('이름');
-  for (var i = 0; i < color_name.length; i++){
-      color_name[i].parentElement.style.color = 'black';
+  for (var i = 0; i < color_name.length; i++) {
+    color_name[i].parentElement.style.color = 'black';
+    color_name[i].parentElement.style.fontSize = fontSize+'px';
+    color_name[i].parentElement.style.fontWeight = fontWeight + 'px';
   }
 }
 
-// function all_checked(sel_type){
-//
-//   var p_delivery = document.getElementsByName('p_delivery');
-//   var sel_type = null;
-//   for (var i = 0; i < p_delivery.length; i++) {
-//
-//     if (p_delivery[i].checked == true) {
-//
-//       sel_type = p_delivery[i].value;
-//
-//     }
-//
-//   }
-//   var name=sel_type+"선택";
-//
-//
-//   var isall1 = document.getElementById(name).checked;
-//
-//   for (var i = 0; i < check.length; i++) {
-//     if (check[i].checked == false) {
-//       isall1 = 0;
-//     }
-//   }
-//
-//   return isall1;
-// }
+function isallcheck(){
+  var ac일반 = document.getElementById("일반선택");
+  var ac새벽 = document.getElementById("새벽선택");
+  if (all_checked("일반")) {
+    ac일반.checked = true;
+  } else {
+    ac일반.checked = false;
+  }
+
+  if (all_checked("새벽")) {
+    ac새벽.checked = true;
+  } else {
+    ac새벽.checked = false;
+  }
+  calculate_sum();
+}
