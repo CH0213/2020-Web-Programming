@@ -1,0 +1,37 @@
+.icon {
+  border: 3px solid #73AD21;
+}
+.material-icons {
+  color: blue;
+}
+
+table, th, td {
+  border: 1px solid black;
+  text-align: center;
+  border-collapse: collapse;
+  padding: 9px;
+  font-family: arial, sans-serif;
+}
+
+/* th {
+  color: white;
+  background-color: green;
+} */
+#addbox {
+  width: 400px;
+  height: 250px;
+  background-color: skyblue;
+  padding: 30px;
+  border: 2px outset;
+  border-radius: 5px;
+  display: none;
+  position: absolute;
+  left: 550px;
+  top: 40px;
+}
+
+#add_title {
+  margin: 0;
+  font-size: 20px;
+  color: blue;
+}
