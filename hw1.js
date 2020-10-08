@@ -336,6 +336,7 @@ function move(delivery) { // deliver는 어디로 이동할지!
 
 
 function search() {
+  get_back();
   var search_name = document.getElementById('search_name').value;
   var min = document.getElementById('min').value;
   var max = document.getElementById('max').value;
